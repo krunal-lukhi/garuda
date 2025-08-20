@@ -1,0 +1,41 @@
+plugins {
+	id 'org.springframework.boot' version '3.3.2'
+	id 'io.spring.dependency-management' version '1.1.5'
+	id 'java'
+}
+
+group = 'com.ontic'
+version = '0.0.1-SNAPSHOT'
+
+java {
+	toolchain { languageVersion = JavaLanguageVersion.of(17) }
+}
+
+repositories { mavenCentral() }
+
+// Align Spring Cloud with your Boot version (example uses Boot 3.3.x ↔ Cloud 2024.0.x)
+ext['springCloudVersion'] = '2024.0.1'
+
+dependencies {
+	implementation 'org.springframework.cloud:spring-cloud-starter-gateway'
+	implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation 'org.springframework.boot:spring-boot-starter-data-mongodb-reactive'
+	implementation 'org.springframework.boot:spring-boot-starter-actuator'
+
+	implementation 'com.github.ben-manes.caffeine:caffeine:3.1.8'
+	implementation 'io.github.resilience4j:resilience4j-spring-boot3:2.2.0'
+
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation 'org.springframework.security:spring-security-test'
+}
+
+dependencyManagement {
+	imports {
+		mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+	}
+}
+
+tasks.withType(Test).configureEach {
+	useJUnitPlatform()
+}
